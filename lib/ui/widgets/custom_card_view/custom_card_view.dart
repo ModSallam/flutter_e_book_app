@@ -10,7 +10,7 @@ class CustomCardView extends StatelessWidget {
     required this.url,
     Key? key,
     this.width = 150,
-    this.height = 200,
+    this.height = 150,
   }) : super(key: key);
 
   @override
@@ -23,9 +23,7 @@ class CustomCardView extends StatelessWidget {
       decoration: BoxDecoration(
         color: MyColors.myBlack,
         borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Placeholder(
-        child: Image(
+        image: DecorationImage(
           image: NetworkImage(url),
           fit: BoxFit.cover,
         ),

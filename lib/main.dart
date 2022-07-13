@@ -3,11 +3,19 @@ import 'package:e_book_bloc_app/logic/logic.dart';
 import 'package:e_book_bloc_app/ui/ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
   BooksRepository booksRepository = BooksRepository();
-  runApp(MyApp(booksRepository: booksRepository));
+  HydratedBlocOverrides.runZoned(
+    () => runApp(MyApp(booksRepository: booksRepository)),
+    storage: storage,
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -35,15 +43,29 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => SearchBloc(booksRepository: booksRepository),
           ),
-        ],
-        child: MaterialApp(
-          title: 'Fire E-Book',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.amber,
-            fontFamily: 'futura',
+          BlocProvider(
+            create: (context) => SwitchBloc(),
           ),
-          home: const MainPage(),
+        ],
+        child: BlocBuilder<SwitchBloc, SwitchState>(
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Fire E-Book',
+              debugShowCheckedModeBanner: false,
+              theme: state.switchValue
+                  ? ThemeData(
+                      primarySwatch: Colors.amber,
+                      fontFamily: 'futura',
+                      brightness: Brightness.dark,
+                    )
+                  : ThemeData(
+                      primarySwatch: Colors.amber,
+                      fontFamily: 'futura',
+                      brightness: Brightness.light,
+                    ),
+              home: const MainPage(),
+            );
+          },
         ),
       ),
     );

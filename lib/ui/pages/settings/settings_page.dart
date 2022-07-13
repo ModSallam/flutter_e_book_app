@@ -1,5 +1,7 @@
+import 'package:e_book_bloc_app/logic/logic.dart';
 import 'package:e_book_bloc_app/ui/ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -20,10 +22,22 @@ class SettingsPage extends StatelessWidget {
           //   icon: Icons.download_outlined,
           //   onTap: () {},
           // ),
-          CustomSettingsItemCard(
-            title: 'Display',
-            icon: Icons.dark_mode_outlined,
-            onTap: () {},
+          BlocBuilder<SwitchBloc, SwitchState>(
+            builder: (context, state) {
+              return CustomSettingsItemCard(
+                title: 'Display',
+                icon: Icons.dark_mode_outlined,
+                clickable: false,
+                trailing: Switch.adaptive(
+                  value: state.switchValue,
+                  onChanged: (value) {
+                    value
+                        ? context.read<SwitchBloc>().add(SwitchOnEvent())
+                        : context.read<SwitchBloc>().add(SwitchOffEvent());
+                  },
+                ),
+              );
+            },
           ),
           // CustomSettingsItemCard(
           //   title: 'Language',

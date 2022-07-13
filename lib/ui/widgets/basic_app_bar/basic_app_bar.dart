@@ -17,9 +17,6 @@ class BasicAppBar extends StatelessWidget with PreferredSizeWidget {
       centerTitle: true,
       title: Text(
         title,
-        style: const TextStyle(
-          color: MyColors.myBlack,
-        ),
       ),
     );
   }

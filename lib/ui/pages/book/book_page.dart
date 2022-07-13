@@ -24,6 +24,8 @@ class BookPage extends StatelessWidget {
                     children: [
                       CustomCardView(
                         url: '${state.book.image}',
+                        width: 100,
+                        height: 150,
                       ),
                       Expanded(
                         child: Column(
